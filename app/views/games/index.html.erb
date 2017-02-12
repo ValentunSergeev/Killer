@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h1 class="header center">Games</h1>
+
+<div class="row">
+  <% @games.each do |game| %>
+    <div class="col s12 m6">
+      <div class="card hoverable">
+        <div class="card-content">
+          <span class="card-title"><%= game.name %></span>
+          <p>I am a very simple card. I am good at containing small bits of information.
+          I am convenient because I require little markup to use effectively.</p>
+        </div>
+        <div class="card-action">
+          <%= link_to 'Show', game %>
+          <%= link_to 'Edit', edit_game_path(game) %>
+          <%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="fixed-action-btn">
+ <a href= <%= new_game_path %> class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+</div>
