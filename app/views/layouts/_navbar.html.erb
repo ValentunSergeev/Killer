@@ -1,23 +1,36 @@
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href= <%= root_path %> class="brand-logo">Logo</a>
-      <ul class="right hide-on-med-and-down">
+      <ul class="right hide-on-med-and-down valign-wrapper">
         <% if user_signed_in? %>
           <li><%= link_to 'New Game', new_game_path %></li>
           <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
+          <li> <%= image_tag(current_user.image, class: "circle responsive-img valign nav-user-img") %> </li>
         <% else %>
-          <li><%= link_to 'Sign up',  new_user_registration_path %></li>
-          <li><%= link_to 'Sign in',  new_user_session_path %></li>
+          <li><%= link_to 'Sign up',  user_vkontakte_omniauth_authorize_path %></li>
+          <li><%= link_to 'Sign in',  user_vkontakte_omniauth_authorize_path %></li>
         <% end %>
       </ul>
 
       <ul id="nav-mobile" class="side-nav">
         <% if user_signed_in? %>
+        <!-- user creditionals -->
+          <div class="row valign-wrapper">
+            <div class="col s4">
+              <%= image_tag(current_user.image, class: "circle responsive-img valign nav-user-img")%>
+            </div>
+            <div class="col s8">
+              <span class="black-text">
+                <%= current_user.name %>
+              </span>
+            </div>
+          </div>
+        <!-- !creditionals -->
           <li><%= link_to 'New Game', new_game_path %></li>
           <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
         <% else %>
-          <li><%= link_to 'Sign up',  new_user_registration_path %></li>
-          <li><%= link_to 'Sign in',  new_user_session_path %></li>
+          <li><%= link_to 'Sign up',  user_vkontakte_omniauth_authorize_path %></li>
+          <li><%= link_to 'Sign in',  user_vkontakte_omniauth_authorize_path %></li>
         <% end %>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
