@@ -1,6 +1,7 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:show, :index]
+  before_action :set_game, only: [:show, :edit, :update, :destroy, :join]
+  before_action :authenticate_user!
+  before_action :owned_game, only: [:edit, :update, :destroy]
 
   # GET /games
   # GET /games.json
@@ -26,6 +27,7 @@ class GamesController < ApplicationController
   # POST /games.json
   def create
     @game = Game.new(game_params)
+    @game.creator_id = current_user.id
 
     respond_to do |format|
       if @game.save
@@ -52,6 +54,11 @@ class GamesController < ApplicationController
     end
   end
 
+  def join
+    current_user.games << @game
+    redirect_to @game, notice: "You was successfully joid to #{@game.name}"
+  end
+
   # DELETE /games/1
   # DELETE /games/1.json
   def destroy
@@ -71,5 +78,9 @@ class GamesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def game_params
       params.require(:game).permit(:name)
+    end
+
+    def owned_game
+      redirect_to root_path, notice: "#{@game.name} is not your game!" unless current_user == @game.creator
     end
 end

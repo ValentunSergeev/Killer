@@ -4,6 +4,7 @@
       <ul class="right hide-on-med-and-down valign-wrapper">
         <% if user_signed_in? %>
           <li><%= link_to 'New Game', new_game_path %></li>
+          <li><%= link_to 'My Games', "#{current_user.uid}/games" %></li>
           <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
           <li> <%= image_tag(current_user.image, class: "circle responsive-img valign nav-user-img") %> </li>
         <% else %>
@@ -26,7 +27,9 @@
             </div>
           </div>
         <!-- !creditionals -->
+
           <li><%= link_to 'New Game', new_game_path %></li>
+          <li><%= link_to 'My Games', "#{current_user.uid}/games" %></li>
           <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
         <% else %>
           <li><%= link_to 'Sign up',  user_vkontakte_omniauth_authorize_path %></li>
