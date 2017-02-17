@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :set_user_by_uid
 
   def games
-    @games = @user.games + @user.created_games
+    @games = @user.games
     render 'games/index', assigns: { games: @games }
   end
 
