@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :edit, :update, :destroy, :join]
+  before_action :set_game, only: [:show, :edit, :update, :destroy, :join, :start]
   before_action :authenticate_user!
-  before_action :owned_game, only: [:edit, :update, :destroy]
+  before_action :owned_game, only: [:edit, :update, :destroy, :start]
 
   # GET /games
   # GET /games.json
@@ -28,6 +28,7 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
     @game.creator_id = current_user.id
+    current_user.games << @game
 
     respond_to do |format|
       if @game.save
@@ -54,11 +55,6 @@ class GamesController < ApplicationController
     end
   end
 
-  def join
-    current_user.games << @game
-    redirect_to @game, notice: "You was successfully joid to #{@game.name}"
-  end
-
   # DELETE /games/1
   # DELETE /games/1.json
   def destroy
@@ -69,18 +65,40 @@ class GamesController < ApplicationController
     end
   end
 
+  def join
+    if @game.registration?
+      current_user.games << @game
+      redirect_to @game, notice: "You was successfully joid to #{@game.name}."
+    else
+      redirect_to root_path, danger: "Registrtion's phase has finished for #{@game.name}."
+    end
+  end
+
+  def start
+    if @game.registration? && @game.members.size >= 2
+      @game.main!
+      #TODO shuffle members and set opponent for each one
+      redirect_to @game, notice: "#{@game.name} was successfully started."
+    else
+      redirect_to root_path, notice: "#{@game.name} is already started or it has not enough players to start."
+    end
+  end
+
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_game
-      @game = Game.find(params[:id])
-    end
+  def set_game
+    @game = Game.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def game_params
-      params.require(:game).permit(:name)
-    end
+  def game_params
+    params.require(:game).permit(:name)
+  end
 
-    def owned_game
-      redirect_to root_path, notice: "#{@game.name} is not your game!" unless current_user == @game.creator
-    end
+  def owned_game
+    redirect_to root_path, notice: "#{@game.name} is not your game!" unless current_user == @game.creator
+  end
+
+  def finish_game
+    @game.finished!
+    #TODO set last member as winner and other finish logic
+  end
 end

@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   resources :games do
-    get 'join', on: :member
+    member do
+      get 'join'
+      get 'start'
+    end
   end
   get '*uid/games', to: 'users#games'
   root 'games#index'

@@ -1,10 +1,9 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, :only_owner, only: [:games]
+  before_action :authenticate_user!, :only_owner
   before_action :set_user_by_uid
 
   def games
-    @games = @user.games
-    render 'games/index', assigns: { games: @games }
+    render 'games/index', assigns: { games: @user.games }
   end
 
   private
