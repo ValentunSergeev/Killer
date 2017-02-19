@@ -1,0 +1,16 @@
+<div class="card-panel">
+  <div class="row valign-wrapper">
+    <div class="col s4">
+      <%= image_tag(@user.image, class: "circle responsive-img valign nav-user-img")%>
+    </div>
+    <div class="col s8">
+      <span class="black-text">
+        <%= @user.name %>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="card-panel">
+  Your secret token is  <%= @user.token %> </br>Show it only to your killer!
+</div>

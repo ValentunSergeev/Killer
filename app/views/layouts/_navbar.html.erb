@@ -4,9 +4,10 @@
       <ul class="right hide-on-med-and-down valign-wrapper">
         <% if user_signed_in? %>
           <li><%= link_to 'New Game', new_game_path %></li>
-          <li><%= link_to 'My Games', "#{current_user.uid}/games" %></li>
+          <li><%= link_to 'My Games', user_games_path(current_user.uid)  %></li>
           <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
-          <li> <%= image_tag(current_user.image, class: "circle responsive-img valign nav-user-img") %> </li>
+          <li><%= link_to image_tag(current_user.image, class: "circle responsive-img valign nav-user-img"),
+                          user_profile_path(current_user.uid) %> </li>
         <% else %>
           <li><%= link_to 'Sign up',  user_vkontakte_omniauth_authorize_path %></li>
           <li><%= link_to 'Sign in',  user_vkontakte_omniauth_authorize_path %></li>
@@ -18,7 +19,8 @@
         <!-- user creditionals -->
           <div class="row valign-wrapper">
             <div class="col s4">
-              <%= image_tag(current_user.image, class: "circle responsive-img valign nav-user-img")%>
+              <%= link_to image_tag(current_user.image, class: "circle responsive-img valign nav-user-img"),
+                          user_profile_path(current_user.uid) %>
             </div>
             <div class="col s8">
               <span class="black-text">
@@ -27,9 +29,8 @@
             </div>
           </div>
         <!-- !creditionals -->
-
           <li><%= link_to 'New Game', new_game_path %></li>
-          <li><%= link_to 'My Games', "#{current_user.uid}/games" %></li>
+          <li><%= link_to 'My Games', user_games_path(current_user.uid)  %></li>
           <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
         <% else %>
           <li><%= link_to 'Sign up',  user_vkontakte_omniauth_authorize_path %></li>
