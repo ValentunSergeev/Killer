@@ -1,7 +1,40 @@
-<p>
-  <strong>Name:</strong>
-  <%= @game.name %>
-</p>
+<h2 class="header center"><%= @game.name %></h2>
 
-<%= link_to 'Edit', edit_game_path(@game) %> |
-<%= link_to 'Back', games_path %>
+<div class="card">
+  <div class="card-content">
+    <div class="card-title">
+      <% if @game.registration? %>
+        <p class="flow-text">Game is not already running, please wait.</p>
+      <% elsif @game.main? %>
+        <p class="flow-text">Game is running. Your next target is:</p>
+      <% else %>
+        Game is over.
+      <% end %>
+    </div>
+
+    <% if @game.main? %>
+
+      <div class="row valign-wrapper">
+        <div class="col s4">
+          <%= image_tag(@target.image, class: "circle responsive-img valign nav-user-img") %>
+        </div>
+        <div class="col s8">
+          <span class="black-text">
+            <%= @target.name %>
+          </span>
+        </div>
+      </div>
+
+    <% end %>
+  </div>
+
+  <div class="card-action">
+    <% if @game.registration? && current_user == @game.creator %>
+    <%= link_to 'Start', start_game_path(@game) %>
+    <%= link_to 'Edit', edit_game_path(@game) %>
+    <%= link_to 'Destroy', @game, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+    <%= link_to 'Back', games_path %>
+  </div>
+
+</div>

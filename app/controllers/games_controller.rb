@@ -12,6 +12,7 @@ class GamesController < ApplicationController
   # GET /games/1
   # GET /games/1.json
   def show
+    @target = User.find_by_uid(current_user.targets[@game.name]) if @game.main?
   end
 
   # GET /games/new
@@ -75,9 +76,14 @@ class GamesController < ApplicationController
   end
 
   def start
-    if @game.registration? && @game.members.size >= 2
+    if @game.registration? && @game.members.size >= 3
+      @game.members = @game.members.shuffle
+      @game.save
+      @game.members.each_with_index do |member, i|
+        member.targets[@game.name] = @game.members[(i + 1) % @game.members.size].uid
+        member.save
+      end
       @game.main!
-      #TODO shuffle members and set opponent for each one
       redirect_to @game, notice: "#{@game.name} was successfully started."
     else
       redirect_to root_path, notice: "#{@game.name} is already started or it has not enough players to start."
